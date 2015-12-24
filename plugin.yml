@@ -1,0 +1,10 @@
+name: AdminFun
+main: me.trevor1134.adminfun.AdminFun
+author: Trevor1134
+version: 2.4.6
+description: The essential plugin for Admin entertainment!
+
+commands:
+  adminfun:
+    description: Main AdminFun command.
+    aliases: [af]

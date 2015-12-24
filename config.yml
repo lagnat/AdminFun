@@ -1,0 +1,45 @@
+# +----------------------------------------------------+ #
+# |            AdminFun Main Configuration             | #
+# |                   By: Trevor1134                   | #
+# |                   Version: 2.0.0                   | #
+# +----------------------------------------------------+ #
+
+adminfun:
+  check-for-updates: true
+  automatic-updates: false
+  
+drop-party:
+  amount: 15
+  items: 
+    - 276
+    - 264
+    - 267
+    - 266
+    - 310
+    - 312
+    - 311
+    - 313
+    - 322
+    - 314
+    - 317
+    - 316
+    - 315
+    - 278
+    - 266
+announce:
+  format: '[Announcement] %MSG%'
+
+tell:
+  format: '&6[%FROM% -> me]: &f%MSG%'
+
+spamcast:
+  message-count: 10
+  
+slap:
+  max-damage: 5
+  
+fireworkShow:
+  amount: 15
+  
+fakequitMsg: '&e%player% has left the game!'
+fakejoinMsg: '&e%player% has joined the game!'
