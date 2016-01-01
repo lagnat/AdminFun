@@ -3,6 +3,9 @@ package me.trevor1134.adminfun;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.trevor1134.adminfun.command.CommandEnum;
@@ -13,11 +16,12 @@ import me.trevor1134.adminfun.listeners.ShowListener;
 import me.trevor1134.adminfun.util.Updater;
 import me.trevor1134.adminfun.util.Updater.UpdateResult;
 import me.trevor1134.adminfun.util.Updater.UpdateType;
+import net.md_5.bungee.api.ChatColor;
 
 /**
  * The Class AdminFun.
  */
-public class AdminFun extends JavaPlugin {
+public class AdminFun extends JavaPlugin implements Listener {
 
 	private boolean active = true;
 
@@ -58,6 +62,7 @@ public class AdminFun extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new FreezeListener(), this);
 		Bukkit.getPluginManager().registerEvents(new ShowListener(this), this);
 		Bukkit.getPluginManager().registerEvents(new LockListener(), this);
+		Bukkit.getPluginManager().registerEvents(this, this);
 
 		saveDefaultConfig();
 		manageUpdater();
@@ -153,4 +158,11 @@ public class AdminFun extends JavaPlugin {
 		}
 	}
 
+	@EventHandler
+	public void onJoin(PlayerJoinEvent e) {
+		if (e.getPlayer().hasPermission("adminfun.help" )&& getConfig().getBoolean("afp-motd")) {
+			e.getPlayer().sendMessage(ChatColor.GOLD
+					+ "Enjoy AdminFun? Upgrade to AdminFunPlus for more features and total customization!\nhttps://www.spigotmc.org/resources/adminfunplus.16371/");
+		}
+	}
 }

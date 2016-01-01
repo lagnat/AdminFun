@@ -43,3 +43,5 @@ fireworkShow:
   
 fakequitMsg: '&e%player% has left the game!'
 fakejoinMsg: '&e%player% has joined the game!'
+
+afp-motd: true
