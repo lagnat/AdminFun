@@ -59,7 +59,7 @@ public class DropPartyCommand extends PlayerCommandBase {
 		final World world = dpLocation.getWorld();
 		final int r = getPlugin().getConfig().getInt("drop-party.amount");
 		world.playEffect(dpLocation, Effect.MOBSPAWNER_FLAMES, 1);
-		world.playSound(dpLocation, Sound.WITHER_SPAWN, 5F, 1F);
+		world.playSound(dpLocation, Sound.ENTITY_WITHER_SPAWN, 5F, 1F);
 		for (int i = 0; i < r; i++) {
 			ItemStack randomItem = getRandomItem();
 			if (randomItem != null) {

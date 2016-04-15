@@ -12,16 +12,17 @@ import org.bukkit.util.Vector;
 import me.trevor1134.adminfun.AdminFun;
 import me.trevor1134.adminfun.command.CommandBase;
 
-public class FireworkCommand extends CommandBase {
+public class RocketCommand extends CommandBase {
+
+	public RocketCommand(AdminFun pl) {
+		super(pl, "rocket", "rocket <player>");
+
+	}
 
 	private int task = -1;
 
-	public FireworkCommand(final AdminFun plugin) {
-		super(plugin, "firework", "firework <player>");
-	}
-
 	@Override
-	public boolean onCommand(final CommandSender s, final String[] args) {
+	public boolean onCommand(CommandSender s, String[] args) {
 		if (isAuthorized(s)) {
 
 			if (args.length == 1) {
@@ -29,10 +30,10 @@ public class FireworkCommand extends CommandBase {
 
 				if (isValidPlayer(p)) {
 					boolean isOutside = true;
-					final int yPos = (int) p.getLocation().getY();
+					int yPos = (int) p.getLocation().getY();
 
 					for (int i = yPos + 1; i < p.getWorld().getMaxHeight(); i++) {
-						final Location yLoc = new Location(p.getLocation().getWorld(), (int) p.getLocation().getX(), i,
+						Location yLoc = new Location(p.getLocation().getWorld(), (int) p.getLocation().getX(), i,
 								(int) p.getLocation().getZ());
 
 						if (yLoc.getBlock() != null) {
@@ -45,23 +46,25 @@ public class FireworkCommand extends CommandBase {
 
 					if (isOutside) {
 
-						final Vector vel = p.getVelocity().setY(10);
-						p.getWorld().playSound(p.getLocation(), Sound.FIREWORK_LAUNCH, 1F, 1F);
+						Vector vel = p.getVelocity().setY(10);
+						p.getWorld().playSound(p.getLocation(), Sound.ENTITY_FIREWORK_LAUNCH, 1F, 1F);
 						p.setVelocity(vel);
 
-						s.sendMessage(ChatColor.BLUE + "You have turned " + ChatColor.DARK_BLUE + p.getName()
-								+ ChatColor.BLUE + " into a firework!");
+						s.sendMessage(ChatColor.BLUE + "You launched " + ChatColor.DARK_BLUE + p.getName()
+								+ ChatColor.BLUE + " into the air!");
 
-						task = Bukkit.getScheduler().scheduleSyncDelayedTask(getPlugin(), new Runnable() {
+						p.sendMessage(ChatColor.DARK_RED + "You have been launched into the air!");
+
+						task = Bukkit.getScheduler().scheduleSyncRepeatingTask(getPlugin(), new Runnable() {
 
 							@Override
 							public void run() {
-								p.getWorld().playSound(p.getLocation(), Sound.FIREWORK_LARGE_BLAST, 1F, 1F);
-								p.getWorld().createExplosion(p.getLocation(), 3F, false);
-								FireworkCommand.this.stopTask();
-							}
+								if (!p.getLocation().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR)) {
 
-						}, 25);
+									RocketCommand.this.stopTask();
+								}
+							}
+						}, 4, 2);
 						return true;
 					} else {
 						s.sendMessage(ChatColor.RED + "Player " + ChatColor.DARK_RED + p.getName() + ChatColor.RED
@@ -74,6 +77,7 @@ public class FireworkCommand extends CommandBase {
 			} else {
 				s.sendMessage(getUsageMessage());
 			}
+
 		} else {
 			denyAccess(s);
 		}

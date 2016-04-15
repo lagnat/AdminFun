@@ -12,17 +12,16 @@ import org.bukkit.util.Vector;
 import me.trevor1134.adminfun.AdminFun;
 import me.trevor1134.adminfun.command.CommandBase;
 
-public class RocketCommand extends CommandBase {
-
-	public RocketCommand(AdminFun pl) {
-		super(pl, "rocket", "rocket <player>");
-
-	}
+public class FireworkCommand extends CommandBase {
 
 	private int task = -1;
 
+	public FireworkCommand(final AdminFun plugin) {
+		super(plugin, "firework", "firework <player>");
+	}
+
 	@Override
-	public boolean onCommand(CommandSender s, String[] args) {
+	public boolean onCommand(final CommandSender s, final String[] args) {
 		if (isAuthorized(s)) {
 
 			if (args.length == 1) {
@@ -30,10 +29,10 @@ public class RocketCommand extends CommandBase {
 
 				if (isValidPlayer(p)) {
 					boolean isOutside = true;
-					int yPos = (int) p.getLocation().getY();
+					final int yPos = (int) p.getLocation().getY();
 
 					for (int i = yPos + 1; i < p.getWorld().getMaxHeight(); i++) {
-						Location yLoc = new Location(p.getLocation().getWorld(), (int) p.getLocation().getX(), i,
+						final Location yLoc = new Location(p.getLocation().getWorld(), (int) p.getLocation().getX(), i,
 								(int) p.getLocation().getZ());
 
 						if (yLoc.getBlock() != null) {
@@ -46,25 +45,23 @@ public class RocketCommand extends CommandBase {
 
 					if (isOutside) {
 
-						Vector vel = p.getVelocity().setY(10);
-						p.getWorld().playSound(p.getLocation(), Sound.FIREWORK_LAUNCH, 1F, 1F);
+						final Vector vel = p.getVelocity().setY(10);
+						p.getWorld().playSound(p.getLocation(), Sound.ENTITY_FIREWORK_LAUNCH, 1F, 1F);
 						p.setVelocity(vel);
 
-						s.sendMessage(ChatColor.BLUE + "You launched " + ChatColor.DARK_BLUE + p.getName()
-								+ ChatColor.BLUE + " into the air!");
+						s.sendMessage(ChatColor.BLUE + "You have turned " + ChatColor.DARK_BLUE + p.getName()
+								+ ChatColor.BLUE + " into a firework!");
 
-						p.sendMessage(ChatColor.DARK_RED + "You have been launched into the air!");
-
-						task = Bukkit.getScheduler().scheduleSyncRepeatingTask(getPlugin(), new Runnable() {
+						task = Bukkit.getScheduler().scheduleSyncDelayedTask(getPlugin(), new Runnable() {
 
 							@Override
 							public void run() {
-								if (!p.getLocation().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR)) {
-
-									RocketCommand.this.stopTask();
-								}
+								p.getWorld().playSound(p.getLocation(), Sound.ENTITY_FIREWORK_LARGE_BLAST, 1F, 1F);
+								p.getWorld().createExplosion(p.getLocation(), 3F, false);
+								FireworkCommand.this.stopTask();
 							}
-						}, 4, 2);
+
+						}, 25);
 						return true;
 					} else {
 						s.sendMessage(ChatColor.RED + "Player " + ChatColor.DARK_RED + p.getName() + ChatColor.RED
@@ -77,7 +74,6 @@ public class RocketCommand extends CommandBase {
 			} else {
 				s.sendMessage(getUsageMessage());
 			}
-
 		} else {
 			denyAccess(s);
 		}
